@@ -83,7 +83,7 @@ GET /topic/weather/1
 Архитектура проекта
 
         QueueService
-resp     PoohServer    Req
+Resp     PoohServer    Req
        TopicService
 
 Req - класс, служит для парсинга входящего запроса.
@@ -93,8 +93,14 @@ PoohMode - указывает на режим работы: queue или topic.
 sourceName - имя очереди или топика.
 param - содержимое запроса.
 
+.....
 
-
+Resp - ответ от сервиса.
+text - текст ответа.
+status  - это HTTP response status codes.
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+И, для примера, что если запрос прошел,
+то статус = 200, а если нет данных, то статус = 204.
 
 
 

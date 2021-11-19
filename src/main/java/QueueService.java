@@ -1,3 +1,6 @@
+import java.util.Collections;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -8,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * (есть тесты)
  */
 public class QueueService implements Service {
-    private final ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>();
+    private static final ConcurrentHashMap<String, ConcurrentLinkedQueue<String>> QUEUE = new ConcurrentHashMap<>();
 
     /**
      * httpRequestType - GET или POST. Он указывает на тип запроса.
@@ -17,15 +20,24 @@ public class QueueService implements Service {
      * param - содержимое запроса (temperature=18 или null)
      */
     @Override
-    public Resp process(Req request) {
-        Resp response = new Resp("BadRequest", "400");
-        if (request.httpRequestType().equals("POST")) {
-            queue.add(request.getParam());
+    public Resp process(Req req) {
+        if ("POST".equals(req.httpRequestType())) {
+            return post(req);
         }
-        if (request.httpRequestType().equals("GET")) {
-            String param = queue.poll();
-            response = new Resp(param, "200");
+        if ("GET".equals(req.httpRequestType())) {
+            return get(req);
         }
-        return response;
-        }
+        return new Resp("type GET or POST", "500");
+    }
+
+    private Resp post(Req req) {
+        QUEUE.putIfAbsent(req.getSourceName(), new ConcurrentLinkedQueue<>(Collections.singleton(req.getParam())));
+        System.out.println(QUEUE.get(req.getSourceName()));
+        return new Resp(req.getParam() + " added to" + req.getSourceName(), "200");
+    }
+
+    private Resp get(Req req) {
+        var element = Optional.ofNullable(QUEUE.get(req.getSourceName()).poll()).orElse("");
+        return new Resp(element, "ОК");
+    }
 }

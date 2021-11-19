@@ -8,8 +8,8 @@
  * то статус = 204.
  */
 public class Resp {
-    private final String text;
-    private final String status;
+    private String text;
+    private String status;
 
     public Resp(String text, String status) {
         this.text = text;
@@ -22,5 +22,9 @@ public class Resp {
 
     public String status() {
         return status;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

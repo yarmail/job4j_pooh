@@ -14,6 +14,13 @@ import java.util.concurrent.Executors;
  * В качестве клиента будем использовать cURL.
  * В качестве протокола будем использовать HTTP.
  *
+ * Для проверки работы сервера можно сделать так:
+ *
+ * curl -X POST -d "temperature=18" http://localhost:9000/queue/weather
+ * curl -X GET http://localhost:9000/queue/weather
+ * curl -X POST -d "temperadfbse=13" http://localhost:9000/topic/weather
+ * curl -X GET http://localhost:9000/topic/weather/admin111
+ *
  */
 public class PoohServer {
     private final HashMap<String, Service>  modes = new HashMap<>();
@@ -52,4 +59,3 @@ public class PoohServer {
         new PoohServer().start();
     }
 }
-

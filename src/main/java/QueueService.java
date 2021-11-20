@@ -32,7 +32,6 @@ public class QueueService implements Service {
 
     private Resp post(Req req) {
         queue.putIfAbsent(req.getSourceName(), new ConcurrentLinkedQueue<>(Collections.singleton(req.getParam())));
-        System.out.println(queue.get(req.getSourceName()));
         return new Resp(req.getParam() + " added to" + req.getSourceName(), "200");
     }
 

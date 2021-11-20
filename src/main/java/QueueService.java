@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * (есть тесты)
  */
 public class QueueService implements Service {
-    private static final ConcurrentHashMap<String, ConcurrentLinkedQueue<String>> QUEUE = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, ConcurrentLinkedQueue<String>> queue = new ConcurrentHashMap<>();
 
     /**
      * httpRequestType - GET или POST. Он указывает на тип запроса.
@@ -31,13 +31,13 @@ public class QueueService implements Service {
     }
 
     private Resp post(Req req) {
-        QUEUE.putIfAbsent(req.getSourceName(), new ConcurrentLinkedQueue<>(Collections.singleton(req.getParam())));
-        System.out.println(QUEUE.get(req.getSourceName()));
+        queue.putIfAbsent(req.getSourceName(), new ConcurrentLinkedQueue<>(Collections.singleton(req.getParam())));
+        System.out.println(queue.get(req.getSourceName()));
         return new Resp(req.getParam() + " added to" + req.getSourceName(), "200");
     }
 
     private Resp get(Req req) {
-        var element = Optional.ofNullable(QUEUE.get(req.getSourceName()).poll()).orElse("");
+        var element = Optional.ofNullable(queue.get(req.getSourceName()).poll()).orElse("");
         return new Resp(element, "ОК");
     }
 }

@@ -5,6 +5,12 @@ public class TopicService implements Service {
 
     private final ConcurrentHashMap<String, ConcurrentHashMap<String, ConcurrentLinkedQueue<String>>> topics = new ConcurrentHashMap<>();
 
+    /**
+     * Единственно что, лучше формировать ответы в виде либо
+     * строки param=value, либо в виде пустой строки "".
+     * Т.к. клиентам нашей очереди все это надо будет парсить.
+     * return new Resp(req.getParam() + " added to" + req.getSourceName(), "200");
+     */
     @Override
     public Resp process(Req req) {
         Resp result = new Resp("", "204 No Content");
